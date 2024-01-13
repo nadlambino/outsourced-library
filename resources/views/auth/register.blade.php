@@ -2,10 +2,21 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
+        <!-- Library -->
+        <div class="mb-3">
+            <x-input-label for="name" :value="__('Library')" />
+            <select class="rounded-md bg-transparent text-white w-full mt-1" name="library" required autofocus>
+                @foreach($libraries as $library)
+                    <option class="bg-gray-800" value="{{ $library->id }}">{{ $library->name }}</option>
+                @endforeach
+            </select>
+            <x-input-error :messages="$errors->get('library')" class="mt-2" />
+        </div>
+
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
