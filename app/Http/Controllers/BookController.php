@@ -4,14 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BorrowRequest;
 use App\Http\Requests\ReturnRequest;
+use App\Http\Resources\BooksResource;
+use App\Services\BookService;
 use App\Services\LibraryService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\MessageBag;
 
 class BookController extends Controller
 {
+    /**
+     * Get all the books.
+     *
+     * @param BookService $bookService The book service.
+     * @param Request $request The request object.
+     * @return BooksResource The book collection resource.
+     */
+    public function index(BookService $bookService, Request $request): BooksResource
+    {
+        return new BooksResource($bookService->paginated($request->all()));
+    }
+
     /**
      * Let the authenticated user to borrow a book.
      *
