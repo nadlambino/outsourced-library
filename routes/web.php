@@ -10,6 +10,7 @@ Route::get('/', fn () => view('welcome'));
 Route::middleware(['auth'])->group(function() {
     Route::get('/shelve', [PageController::class, 'shelve'])->name('shelve');
     Route::get('/library', [PageController::class, 'library'])->name('library');
+    Route::get('/history', [PageController::class, 'history'])->name('history');
 
     Route::post('/book/borrow', [BookController::class, 'borrow'])->name('book.borrow');
     Route::post('/book/return', [BookController::class, 'return'])->name('book.return');

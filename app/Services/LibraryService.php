@@ -41,19 +41,24 @@ class LibraryService
      * Get the borrow history of the given authenticated user.
      *
      * @param Authenticatable $user The authenticated user.
-     * @param bool $isReturned Determine whether to return only returned or not returned.
+     * @param array $filters The query filters.
      * @return Collection The history collection.
      */
-    public function getBorrowHistoryByUser(Authenticatable $user, bool $isReturned = false): Collection
+    public function getBorrowHistoryByUser(Authenticatable $user, array $filters = []): Collection
     {
+        $isReturned = $filters['is_returned'] ?? null;
+
         return $user->borrowHistory()
-            ->when($isReturned, function ($query) {
-                $query->whereNotNull('returned_at');
-            })
-            ->when(!$isReturned, function ($query) {
-                $query->whereNull('returned_at');
+            ->when(!is_null($isReturned), function ($query) use ($isReturned) {
+                $query->when($isReturned, function ($query) {
+                    $query->whereNotNull('returned_at');
+                })
+                ->when(!$isReturned, function ($query) {
+                    $query->whereNull('returned_at');
+                });
             })
             ->with('book')
+            ->orderByDesc('id')
             ->get();
     }
 

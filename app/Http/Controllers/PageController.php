@@ -16,7 +16,7 @@ class PageController extends Controller
      */
     public function shelve(LibraryService $libraryService): View
     {
-        $histories = $libraryService->getBorrowHistoryByUser(Auth::user());
+        $histories = $libraryService->getBorrowHistoryByUser(Auth::user(), ['is_returned' => false]);
 
         return view('pages.shelve', compact('histories'));
     }
@@ -32,5 +32,18 @@ class PageController extends Controller
         $books = $libraryService->getBooksByLibrary(Auth::user()?->library);
 
         return view('pages.library', compact('books'));
+    }
+
+    /**
+     * Render history page.
+     *
+     * @param LibraryService $libraryService
+     * @return View
+     */
+    public function history(LibraryService $libraryService): View
+    {
+        $histories = $libraryService->getBorrowHistoryByUser(Auth::user());
+
+        return view('pages.history', compact('histories'));
     }
 }
