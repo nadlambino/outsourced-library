@@ -13,26 +13,22 @@ use Illuminate\Support\MessageBag;
 class BookController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * @throws Exception
+     * Let the authenticated user to borrow a book.
+     *
+     * @param BorrowRequest $request The borrow request object.
+     * @param LibraryService $libraryService The library service.
+     * @return RedirectResponse The response to redirect the user back to the library page.
      */
     public function borrow(BorrowRequest $request, LibraryService $libraryService): RedirectResponse
     {
         try {
-            $libraryService->borrowBook(Auth::user(), $request->validated('bookId'));
+            $libraryService->borrowBook(Auth::user(), $request->validated('book'));
 
             session()->flash('message', 'Successfully borrowed a book.');
             $response = redirect('library');
-        } catch (Exception) {
+        } catch (Exception $exception) {
             $errors = new MessageBag();
-            $errors->add('bookId', "Your library doesn't have this book!");
+            $errors->add('book', $exception->getMessage());
 
             $response = redirect('library')->withErrors($errors);
         }

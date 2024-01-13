@@ -18,20 +18,25 @@ class BorrowRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array
      */
     public function rules(): array
     {
         return [
-            'bookId' => ['numeric', 'exists:books,id']
+            'book' => ['numeric', 'exists:books,id']
         ];
     }
 
-    public function messages()
+    /**
+     * The custom messages for each validation rule.
+     *
+     * @return array
+     */
+    public function messages(): array
     {
         return [
-            'bookId' => [
-                'exists' => 'Your library doesn\'t have this book!'
+            'book' => [
+                'exists' => "Your library doesn't have this book!"
             ]
         ];
     }

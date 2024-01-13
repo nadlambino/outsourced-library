@@ -13,12 +13,12 @@
                         <span>{{ session('message') }}</span>
                     </div>
                 @endif
-                @error('bookId')
-                <div class="border border-red-500 p-3 mb-5 text-red-500 rounded-md w-full md:w-1/2 mx-auto text-center">
-                    @foreach($errors->get('bookId') as $error)
-                        <span>{{ $error }}</span>
-                    @endforeach
-                </div>
+                @error('book')
+                    <div class="border border-red-500 p-3 mb-5 text-red-500 rounded-md w-full md:w-1/2 mx-auto text-center">
+                        @foreach($errors->get('book') as $error)
+                            <span>{{ $error }}</span>
+                        @endforeach
+                    </div>
                 @enderror
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -38,7 +38,7 @@
                                 <td class="px-6 py-4">
                                     <form method="POST" action="{{ route('book.borrow') }}">
                                         @csrf
-                                        <input type="hidden" name="bookId" value="{{ $book->id }}">
+                                        <input type="hidden" name="book" value="{{ $book->id }}">
                                         <x-primary-button disabled="{{ (bool) $book->is_borrowed }}">
                                             {{ __('Borrow') }}
                                         </x-primary-button>

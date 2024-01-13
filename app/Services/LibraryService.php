@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Exceptions\BookNotAvailableException;
+use App\Exceptions\BookNotFoundException;
 use App\Models\Book;
 use App\Models\BorrowHistory;
 use App\Models\Library;
@@ -14,6 +16,7 @@ class LibraryService
 {
     public function __construct(
         protected Library       $library,
+        protected Book          $book,
         protected BorrowHistory $borrowHistory
     )
     {
@@ -43,7 +46,13 @@ class LibraryService
     }
 
     /**
-     * @throws Exception
+     * Let the user borrow a book from the library where they're associated with.
+     *
+     * @param Authenticatable $user The authenticated user.
+     * @param int $bookId The book ID to borrow.
+     * @return Book The borrowed book instance.
+     * @throws BookNotFoundException Throw if book is not found on the associated library.
+     * @throws BookNotAvailableException Throw if the book has already been borrowed.
      */
     public function borrowBook(Authenticatable $user, int $bookId): Book
     {
@@ -90,10 +99,13 @@ class LibraryService
     }
 
     /**
-     * @param Authenticatable $user
-     * @param int $bookId
-     * @return Book
-     * @throws Exception
+     * Find the book from the authenticated user's associated library.
+     *
+     * @param Authenticatable $user The authenticated user.
+     * @param int $bookId The book ID to borrow.
+     * @return Book The borrowed book instance.
+     * @throws BookNotFoundException Throw if book is not found on the associated library.
+     * @throws BookNotAvailableException Throw if the book has already been borrowed.
      */
     protected function findBookToBorrow(Authenticatable $user, int $bookId): Book
     {
@@ -101,21 +113,35 @@ class LibraryService
         $book = $user->library->books->find($bookId);
 
         if (empty($book)) {
-            throw new Exception("Your library doesn't have this book!");
+            throw new BookNotFoundException("Your library doesn't have this book!");
         }
 
         if ($book->is_borrowed) {
-            throw new Exception("Book has already been borrowed!");
+            throw new BookNotAvailableException("Book has already been borrowed!");
         }
 
         return $book;
     }
 
-    protected function setBookAsBorrowed(Book $book, bool $isBorrowed = true): void
+    /**
+     * Set the book status whether it is borrowed or not.
+     *
+     * @param Book $book The book instance.
+     * @param bool $isBorrowed Determine whether it is borrowed or not.
+     * @return bool Whether the update was successful.
+     */
+    protected function setBookAsBorrowed(Book $book, bool $isBorrowed = true): bool
     {
-        $book->update(['is_borrowed' => $isBorrowed]);
+        return $book->update(['is_borrowed' => $isBorrowed]);
     }
 
+    /**
+     * Create a new borrow history.
+     *
+     * @param Authenticatable $user The authenticated user who borrowed the book.
+     * @param Book $book The book instance that was borrowed.
+     * @return void
+     */
     protected function createBorrowHistory(Authenticatable $user, Book $book): void
     {
         $this->borrowHistory->query()->create([
