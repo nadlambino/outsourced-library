@@ -13,4 +13,9 @@ class LibraryService
     {
         return $this->library->all();
     }
+
+    public function getBooksByLibrary(Library $library): Collection
+    {
+        return $library->books()->get();
+    }
 }

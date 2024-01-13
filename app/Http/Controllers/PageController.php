@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\LibraryService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
 {
@@ -14,10 +15,10 @@ class PageController extends Controller
         return view('pages.shelve');
     }
 
-    public function libraries(LibraryService $libraryService): View
+    public function library(LibraryService $libraryService): View
     {
-        $libraries = $libraryService->all();
+        $books = $libraryService->getBooksByLibrary(Auth::user()?->library);
 
-        return view('pages.libraries', compact('libraries'));
+        return view('pages.library', compact('books'));
     }
 }

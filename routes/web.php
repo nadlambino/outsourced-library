@@ -10,7 +10,7 @@ Route::get('/', function () {
 
 Route::controller(PageController::class)->middleware(['auth'])->group(function () {
     Route::get('/shelve', 'shelve')->name('shelve');
-    Route::get('/libraries', 'libraries')->name('libraries');
+    Route::get('/library', 'library')->name('library');
 });
 
 Route::middleware('auth')->group(function () {

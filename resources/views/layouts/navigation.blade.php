@@ -15,8 +15,8 @@
                     <x-nav-link :href="route('shelve')" :active="request()->routeIs('shelve')">
                         {{ __('Shelve') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('libraries')" :active="request()->routeIs('libraries')">
-                        {{ __('Libraries') }}
+                    <x-nav-link :href="route('library')" :active="request()->routeIs('library')">
+                        {{ __('Library') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -73,8 +73,8 @@
             <x-responsive-nav-link :href="route('shelve')" :active="request()->routeIs('shelve')">
                 {{ __('Shelve') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('libraries')" :active="request()->routeIs('libraries')">
-                {{ __('Libraries') }}
+            <x-responsive-nav-link :href="route('library')" :active="request()->routeIs('library')">
+                {{ __('Library') }}
             </x-responsive-nav-link>
         </div>
 
