@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,10 @@ Route::get('/', function () {
 Route::controller(PageController::class)->middleware(['auth'])->group(function () {
     Route::get('/shelve', 'shelve')->name('shelve');
     Route::get('/library', 'library')->name('library');
+});
+
+Route::middleware(['auth'])->group(function() {
+   Route::post('/book/borrow', [BookController::class, 'borrow'])->name('book.borrow');
 });
 
 Route::middleware('auth')->group(function () {

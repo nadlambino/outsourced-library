@@ -11,6 +11,8 @@ class BorrowHistory extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['user_id', 'book_id'];
+
     public const CREATED_AT = 'borrowed_at';
 
     public const UPDATED_AT = 'returned_at';

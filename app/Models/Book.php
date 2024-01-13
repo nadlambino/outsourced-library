@@ -11,6 +11,8 @@ class Book extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['is_borrowed'];
+
     protected $appends = ['status'];
 
     public function status(): Attribute

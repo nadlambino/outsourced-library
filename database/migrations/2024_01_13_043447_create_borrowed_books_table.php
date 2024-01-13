@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('borrow_history', function (Blueprint $table) {
+        Schema::create('borrow_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Book::class);
             $table->boolean('is_returned')->default(false);
-            $table->timestamps();
+            $table->timestamp('borrowed_at')->default(now());
+            $table->timestamp('returned_at')->nullable()->default(null);
         });
     }
 
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('borrowed_books');
+        Schema::dropIfExists('borrow_histories');
     }
 };
