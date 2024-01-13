@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Author;
 use App\Models\Library;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,20 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('books', function (Blueprint $table) {
-            $table->id();
+        Schema::table('users', function (Blueprint $table) {
             $table->foreignIdFor(Library::class)
+                ->after('id')
                 ->references('id')
                 ->on('libraries')
                 ->restrictOnDelete();
-            $table->foreignIdFor(Author::class)
-                ->references('id')
-                ->on('authors')
-                ->restrictOnDelete();
-            $table->string('title');
-            $table->boolean('is_borrowed')->default(false);
-            $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -35,6 +26,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('books');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeignIdFor(Library::class);
+        });
     }
 };

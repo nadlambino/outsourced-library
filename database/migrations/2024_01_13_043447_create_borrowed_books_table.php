@@ -15,8 +15,14 @@ return new class extends Migration
     {
         Schema::create('borrow_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Book::class);
+            $table->foreignIdFor(User::class)
+                ->references('id')
+                ->on('users')
+                ->restrictOnDelete();
+            $table->foreignIdFor(Book::class)
+                ->references('id')
+                ->on('books')
+                ->restrictOnDelete();
             $table->boolean('is_returned')->default(false);
             $table->timestamp('borrowed_at')->default(now());
             $table->timestamp('returned_at')->nullable()->default(null);
