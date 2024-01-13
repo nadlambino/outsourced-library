@@ -63,9 +63,12 @@ class LibraryService
      * @param Library $library The library instance. Typically, get from the authenticated user.
      * @return Collection The book collection.
      */
-    public function getBooksByLibrary(Library $library): Collection
+    public function getBooksByLibrary(Library $library, bool $isBorrowed = false): Collection
     {
-        return $library->books()->get();
+        return $library
+            ->books()
+            ->where('is_borrowed', $isBorrowed)
+            ->get();
     }
 
     /**
