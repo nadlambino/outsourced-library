@@ -30,7 +30,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($books as $book)
+                        @forelse($books as $book)
                             <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                 <td class="px-6 py-4">{{ $book->title }}</td>
                                 <td class="px-6 py-4">{{ $book->author->name }}</td>
@@ -45,7 +45,11 @@
                                     </form>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                <td class="px-6 py-4 text-center" colspan="4">No books are available to borrow.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

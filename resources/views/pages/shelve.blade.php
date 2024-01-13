@@ -47,7 +47,7 @@
                             </tr>
                         @empty
                             <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                <td class="px-6 py-4 text-center" colspan="4">No borrowed books to return</td>
+                                <td class="px-6 py-4 text-center" colspan="4">No borrowed books to return.</td>
                             </tr>
                         @endforelse
                     </tbody>
