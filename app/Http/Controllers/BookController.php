@@ -36,6 +36,13 @@ class BookController extends Controller
         return $response;
     }
 
+    /**
+     * Let the user return a borrowed book.
+     *
+     * @param ReturnRequest $request The return request object.
+     * @param LibraryService $libraryService The library service.
+     * @return RedirectResponse The response to redirect the user back to shelve page.
+     */
     public function return(ReturnRequest $request, LibraryService $libraryService): RedirectResponse
     {
         try {
@@ -45,7 +52,7 @@ class BookController extends Controller
             $response = redirect('shelve');
         } catch (Exception) {
             $errors = new MessageBag();
-            $errors->add('history_id', "Something went wrong while returning the book.");
+            $errors->add('history', "Something went wrong while returning the book.");
 
             $response = redirect('shelve')->withErrors($errors);
         }

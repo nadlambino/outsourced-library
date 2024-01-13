@@ -22,30 +22,34 @@
                 @enderror
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">Title</th>
-                        <th scope="col" class="px-6 py-3">Author</th>
-                        <th scope="col" class="px-6 py-3">Borrowed Since</th>
-                        <th scope="col" class="px-6 py-3">Action</th>
-                    </tr>
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Title</th>
+                            <th scope="col" class="px-6 py-3">Author</th>
+                            <th scope="col" class="px-6 py-3">Borrowed Since</th>
+                            <th scope="col" class="px-6 py-3">Action</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    @foreach($histories as $history)
-                        <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                            <td class="px-6 py-4">{{ $history->book->title }}</td>
-                            <td class="px-6 py-4">{{ $history->book->author->name }}</td>
-                            <td class="px-6 py-4">{{ \Carbon\Carbon::parse($history->borrowed_at)->format('M d Y h:i A') }}</td>
-                            <td class="px-6 py-4">
-                                <form method="POST" action="{{ route('book.return') }}">
-                                    @csrf
-                                    <input type="hidden" name="history" value="{{ $history->id }}">
-                                    <x-primary-button disabled="{{ isset($book->is_returned) }}">
-                                        {{ __('Return') }}
-                                    </x-primary-button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
+                        @forelse($histories as $history)
+                            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                <td class="px-6 py-4">{{ $history->book->title }}</td>
+                                <td class="px-6 py-4">{{ $history->book->author->name }}</td>
+                                <td class="px-6 py-4">{{ \Carbon\Carbon::parse($history->borrowed_at)->format('M d Y h:i A') }}</td>
+                                <td class="px-6 py-4">
+                                    <form method="POST" action="{{ route('book.return') }}">
+                                        @csrf
+                                        <input type="hidden" name="history" value="{{ $history->id }}">
+                                        <x-primary-button disabled="{{ isset($book->is_returned) }}">
+                                            {{ __('Return') }}
+                                        </x-primary-button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                <td class="px-6 py-4 text-center" colspan="4">No borrowed books to return</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

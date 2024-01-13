@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Services\LibraryService;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
 {
+    /**
+     * Render shelve page.
+     *
+     * @param LibraryService $libraryService
+     * @return View
+     */
     public function shelve(LibraryService $libraryService): View
     {
         $histories = $libraryService->getBorrowHistoryByUser(Auth::user());
@@ -17,6 +21,12 @@ class PageController extends Controller
         return view('pages.shelve', compact('histories'));
     }
 
+    /**
+     * Render library page.
+     *
+     * @param LibraryService $libraryService
+     * @return View
+     */
     public function library(LibraryService $libraryService): View
     {
         $books = $libraryService->getBooksByLibrary(Auth::user()?->library);
