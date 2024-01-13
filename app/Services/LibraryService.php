@@ -19,6 +19,11 @@ class LibraryService
         return $this->library->all();
     }
 
+    public function getBooksBorrowedByUser(Authenticatable $user): Collection
+    {
+        return $user->borrowHistory()->with('book')->get();
+    }
+
     public function getBooksByLibrary(Library $library): Collection
     {
         return $library->books()->get();
@@ -77,7 +82,9 @@ class LibraryService
     {
         $this->borrowHistory->query()->create([
             'user_id' => $user->id,
-            'book_id' => $book->id
+            'book_id' => $book->id,
+            'borrowed_at' => now(),
+            'returned_at' => null
         ]);
     }
 }

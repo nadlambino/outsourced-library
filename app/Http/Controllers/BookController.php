@@ -27,6 +27,7 @@ class BookController extends Controller
         try {
             $libraryService->borrowBook(Auth::user(), $request->validated('bookId'));
 
+            session()->flash('message', 'Successfully borrowed a book.');
             $response = redirect('library');
         } catch (Exception) {
             $errors = new MessageBag();
