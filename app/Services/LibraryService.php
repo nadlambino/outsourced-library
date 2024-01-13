@@ -12,16 +12,29 @@ use Illuminate\Support\Facades\DB;
 
 class LibraryService
 {
-    public function __construct(protected Library $library, protected BorrowHistory $borrowHistory) { }
+    public function __construct(
+        protected Library       $library,
+        protected BorrowHistory $borrowHistory
+    )
+    {
+    }
 
     public function all(): Collection
     {
         return $this->library->all();
     }
 
-    public function getBooksBorrowedByUser(Authenticatable $user): Collection
+    public function getBorrowHistoryByUser(Authenticatable $user, bool $isReturned = false): Collection
     {
-        return $user->borrowHistory()->with('book')->get();
+        return $user->borrowHistory()
+            ->when($isReturned, function ($query) {
+                $query->whereNotNull('returned_at');
+            })
+            ->when(!$isReturned, function ($query) {
+                $query->whereNull('returned_at');
+            })
+            ->with('book')
+            ->get();
     }
 
     public function getBooksByLibrary(Library $library): Collection
@@ -44,6 +57,31 @@ class LibraryService
             DB::commit();
 
             return $book;
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * @param int $historyId
+     * @return mixed
+     * @throws Exception
+     */
+    public function returnBook(int $historyId)
+    {
+        try {
+            DB::beginTransaction();
+
+            $history = $this->borrowHistory->findOrFail($historyId);
+
+            $this->setBookAsBorrowed($history->book, false);
+            $history->update(['returned_at' => now()]);
+
+            DB::commit();
+
+            return $history->fresh();
         } catch (Exception $exception) {
             DB::rollBack();
 

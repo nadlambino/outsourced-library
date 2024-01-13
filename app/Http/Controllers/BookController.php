@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BorrowRequest;
+use App\Http\Requests\ReturnRequest;
 use App\Services\LibraryService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -34,6 +35,23 @@ class BookController extends Controller
             $errors->add('bookId', "Your library doesn't have this book!");
 
             $response = redirect('library')->withErrors($errors);
+        }
+
+        return $response;
+    }
+
+    public function return(ReturnRequest $request, LibraryService $libraryService): RedirectResponse
+    {
+        try {
+            $libraryService->returnBook($request->validated('history_id'));
+
+            session()->flash('message', 'Successfully returned a book.');
+            $response = redirect('shelve');
+        } catch (Exception) {
+            $errors = new MessageBag();
+            $errors->add('history_id', "Something went wrong while returning the book.");
+
+            $response = redirect('shelve')->withErrors($errors);
         }
 
         return $response;

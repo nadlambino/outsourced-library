@@ -10,9 +10,11 @@ use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
 {
-    public function shelve(): View
+    public function shelve(LibraryService $libraryService): View
     {
-        return view('pages.shelve');
+        $histories = $libraryService->getBorrowHistoryByUser(Auth::user());
+
+        return view('pages.shelve', compact('histories'));
     }
 
     public function library(LibraryService $libraryService): View
