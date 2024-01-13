@@ -7,7 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <div class="relative overflow-x-auto">
                 @if(session('message'))
                     <div class="border border-green-500 p-3 mb-5 text-green-500 rounded-md w-full md:w-1/2 mx-auto text-center">
                         <span>{{ session('message') }}</span>
@@ -20,38 +20,34 @@
                         @endforeach
                     </div>
                 @enderror
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">Title</th>
-                            <th scope="col" class="px-6 py-3">Author</th>
-                            <th scope="col" class="px-6 py-3">Status</th>
-                            <th scope="col" class="px-6 py-3">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($books as $book)
-                            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                <td class="px-6 py-4">{{ $book->title }}</td>
-                                <td class="px-6 py-4">{{ $book->author->name }}</td>
-                                <td class="px-6 py-4">{{ $book->status }}</td>
-                                <td class="px-6 py-4">
-                                    <form method="POST" action="{{ route('book.borrow') }}">
-                                        @csrf
-                                        <input type="hidden" name="book" value="{{ $book->id }}">
-                                        <x-primary-button disabled="{{ (bool) $book->is_borrowed }}">
-                                            {{ __('Borrow') }}
-                                        </x-primary-button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                <td class="px-6 py-4 text-center" colspan="4">No books are available to borrow.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+
+                @if(count($books) === 0)
+                    <div class="text-gray-500 text-xl text-center">
+                        No books are available to borrow.
+                    </div>
+                @endif
+
+                <div class="grid grid-cols-1 gap-5 md:grid-cols-3 lg:grid-cols-5 justify-items-center my-5 relative px-5">
+                    @foreach($books as $book)
+                        <div class="flex flex-col items-center gap-3" title="{{ $book->title }}">
+                            <div class="bg-gray-700 rounded-l-md rounded-r-sm h-56 flex justify-end relative w-[180px] shadow-2xl">
+                                <div class="w-[90%] bg-gray-500 flex flex-col justify-start pt-5 rounded-r-sm">
+                                    <div class="bg-gray-300 h-[65px] line-clamp-3 px-5 py-1 text-sm font-bold">
+                                        {{ $book->title }}
+                                    </div>
+                                </div>
+                                <span class="absolute bottom-2 right-2 text-xs text-gray-900">{{ $book->author->name }}</span>
+                            </div>
+                            <form method="POST" action="{{ route('book.borrow') }}">
+                                @csrf
+                                <input type="hidden" name="book" value="{{ $book->id }}">
+                                <x-primary-button disabled="{{ (bool) $book->is_borrowed }}">
+                                    {{ __('Borrow') }}
+                                </x-primary-button>
+                            </form>
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
