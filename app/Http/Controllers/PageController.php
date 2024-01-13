@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Services\LibraryService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
@@ -13,8 +14,10 @@ class PageController extends Controller
         return view('pages.shelve');
     }
 
-    public function libraries(): View
+    public function libraries(LibraryService $libraryService): View
     {
-        return view('pages.libraries');
+        $libraries = $libraryService->all();
+
+        return view('pages.libraries', compact('libraries'));
     }
 }
