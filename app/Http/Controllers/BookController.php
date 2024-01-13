@@ -56,7 +56,7 @@ class BookController extends Controller
      *
      * @param ReturnRequest $request The return request object.
      * @param LibraryService $libraryService The library service.
-     * @return RedirectResponse The response to redirect the user back to shelve page.
+     * @return RedirectResponse The response to redirect the user back to shelf page.
      */
     public function return(ReturnRequest $request, LibraryService $libraryService): RedirectResponse
     {
@@ -64,12 +64,12 @@ class BookController extends Controller
             $libraryService->returnBook($request->validated('history'));
 
             session()->flash('message', 'Successfully returned a book.');
-            $response = redirect('shelve');
+            $response = redirect('shelf');
         } catch (Exception) {
             $errors = new MessageBag();
             $errors->add('history', "Something went wrong while returning the book.");
 
-            $response = redirect('shelve')->withErrors($errors);
+            $response = redirect('shelf')->withErrors($errors);
         }
 
         return $response;
