@@ -47,11 +47,21 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    /**
+     * The relationship method to get the library where this user is associated with.
+     *
+     * @return BelongsTo
+     */
     public function library(): BelongsTo
     {
         return $this->belongsTo(Library::class);
     }
 
+    /**
+     * The relationship method to get the borrow history of this user.
+     *
+     * @return HasMany
+     */
     public function borrowHistory(): HasMany
     {
         return $this->hasMany(BorrowHistory::class);

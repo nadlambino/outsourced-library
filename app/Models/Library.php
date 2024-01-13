@@ -11,6 +11,11 @@ class Library extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * The relationship method to get books of this library.
+     *
+     * @return HasMany
+     */
     public function books(): HasMany
     {
         return $this->hasMany(Book::class);
