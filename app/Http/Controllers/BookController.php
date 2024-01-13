@@ -39,7 +39,7 @@ class BookController extends Controller
     public function return(ReturnRequest $request, LibraryService $libraryService): RedirectResponse
     {
         try {
-            $libraryService->returnBook($request->validated('history_id'));
+            $libraryService->returnBook($request->validated('history'));
 
             session()->flash('message', 'Successfully returned a book.');
             $response = redirect('shelve');

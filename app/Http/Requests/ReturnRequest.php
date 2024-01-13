@@ -18,12 +18,12 @@ class ReturnRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array
      */
     public function rules(): array
     {
         return [
-            'history_id' => ['numeric', 'exists:borrow_histories,id']
+            'history' => ['numeric', 'exists:borrow_histories,id']
         ];
     }
 }

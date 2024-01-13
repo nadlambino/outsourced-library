@@ -14,19 +14,36 @@ use Illuminate\Support\Facades\DB;
 
 class LibraryService
 {
+    /**
+     * Service constructor.
+     *
+     * @param Library $library The library model.
+     * @param BorrowHistory $borrowHistory The borrow history model.
+     */
     public function __construct(
         protected Library       $library,
-        protected Book          $book,
         protected BorrowHistory $borrowHistory
     )
     {
     }
 
+    /**
+     * Get all the libraries.
+     *
+     * @return Collection
+     */
     public function all(): Collection
     {
         return $this->library->all();
     }
 
+    /**
+     * Get the borrow history of the given authenticated user.
+     *
+     * @param Authenticatable $user The authenticated user.
+     * @param bool $isReturned Determine whether to return only returned or not returned.
+     * @return Collection The history collection.
+     */
     public function getBorrowHistoryByUser(Authenticatable $user, bool $isReturned = false): Collection
     {
         return $user->borrowHistory()
@@ -40,6 +57,12 @@ class LibraryService
             ->get();
     }
 
+    /**
+     * Get the books of the given library instance.
+     *
+     * @param Library $library The library instance. Typically, get from the authenticated user.
+     * @return Collection The book collection.
+     */
     public function getBooksByLibrary(Library $library): Collection
     {
         return $library->books()->get();
@@ -74,23 +97,28 @@ class LibraryService
     }
 
     /**
-     * @param int $historyId
-     * @return mixed
+     * Let the user return a book.
+     *
+     * @param int $historyId The history ID associated with the borrowed book, borrower, and library.
+     * @return Book
      * @throws Exception
      */
-    public function returnBook(int $historyId)
+    public function returnBook(int $historyId): Book
     {
         try {
             DB::beginTransaction();
 
+            /** @var BorrowHistory $history */
             $history = $this->borrowHistory->findOrFail($historyId);
-
-            $this->setBookAsBorrowed($history->book, false);
             $history->update(['returned_at' => now()]);
+
+            /** @var Book $book */
+            $book = $history->book;
+            $this->setBookAsBorrowed($book, false);
 
             DB::commit();
 
-            return $history->fresh();
+            return $book;
         } catch (Exception $exception) {
             DB::rollBack();
 

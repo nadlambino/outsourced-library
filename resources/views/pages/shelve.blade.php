@@ -15,7 +15,7 @@
                 @endif
                 @error('bookId')
                 <div class="border border-red-500 p-3 mb-5 text-red-500 rounded-md w-full md:w-1/2 mx-auto text-center">
-                    @foreach($errors->get('history_id') as $error)
+                    @foreach($errors->get('history') as $error)
                         <span>{{ $error }}</span>
                     @endforeach
                 </div>
@@ -38,7 +38,7 @@
                             <td class="px-6 py-4">
                                 <form method="POST" action="{{ route('book.return') }}">
                                     @csrf
-                                    <input type="hidden" name="history_id" value="{{ $history->id }}">
+                                    <input type="hidden" name="history" value="{{ $history->id }}">
                                     <x-primary-button disabled="{{ isset($book->is_returned) }}">
                                         {{ __('Return') }}
                                     </x-primary-button>
