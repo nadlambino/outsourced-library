@@ -79,7 +79,7 @@
             <x-responsive-nav-link :href="route('library')" :active="request()->routeIs('library')">
                 {{ __('Library') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('library')" :active="request()->routeIs('history')">
+            <x-responsive-nav-link :href="route('history')" :active="request()->routeIs('history')">
                 {{ __('History') }}
             </x-responsive-nav-link>
         </div>
