@@ -22,3 +22,5 @@ php artisan serve
 ```
 
 For `forgot password`, use mailtrap and add the configs to `.env`
+
+If there is something wrong with the UI, run `npm run build`
