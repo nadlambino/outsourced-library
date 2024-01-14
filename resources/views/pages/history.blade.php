@@ -8,18 +8,6 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                @if(session('message'))
-                    <div class="border border-green-500 p-3 mb-5 text-green-500 rounded-md w-full md:w-1/2 mx-auto text-center">
-                        <span>{{ session('message') }}</span>
-                    </div>
-                @endif
-                @error('bookId')
-                <div class="border border-red-500 p-3 mb-5 text-red-500 rounded-md w-full md:w-1/2 mx-auto text-center">
-                    @foreach($errors->get('history') as $error)
-                        <span>{{ $error }}</span>
-                    @endforeach
-                </div>
-                @enderror
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
